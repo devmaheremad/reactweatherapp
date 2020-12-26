@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import WeatherForm from './Components/WeatherFrom'
 import WeatherResault from './Components/WeatherResualt'
 import './AppStyled.js';
+import axios from 'axios';
 
 class App extends Component {
 
@@ -14,31 +15,58 @@ class App extends Component {
     erorr: ''
   }
 
-  getWeather = async (e) => {
+  // getWeather = async (e) => {
+  //   e.preventDefault()
+  //   const city = e.target.elements.city.value
+  //   const country = e.target.elements.country.value
+  //   const KEY = '6d3e214283afdd4c3332b2fad92fddea'
+  //   const LINK = `http://api.openweathermap.org/data/2.5/weather?q=${city}%2C${country}&appid=${KEY}`
+  //   const api = await fetch(LINK)
+  //   const data = await api.json()
+  //   if (city && country) {
+  //     this.setState({
+  //       temperature: data.main.temp,
+  //       city: data.name,
+  //       country: data.sys.country,
+  //       humidity: data.main.humidity,
+  //       description: data.weather[0].description,
+  //       erorr: ''
+  //     })
+  //   } else {this.setState({
+  //     temperature: '',
+  //     city: '',
+  //     country: '',
+  //     humidity: '',
+  //     description: '',
+  //     erorr: 'Please Enter Valid Data'
+  //   })}
+  // }
+
+  getWeather = (e) => {
     e.preventDefault()
     const city = e.target.elements.city.value
     const country = e.target.elements.country.value
     const KEY = '6d3e214283afdd4c3332b2fad92fddea'
     const LINK = `http://api.openweathermap.org/data/2.5/weather?q=${city}%2C${country}&appid=${KEY}`
-    const api = await fetch(LINK)
-    const data = await api.json()
-    if (city && country) {
-      this.setState({
-        temperature: data.main.temp,
-        city: data.name,
-        country: data.sys.country,
-        humidity: data.main.humidity,
-        description: data.weather[0].description,
-        erorr: ''
-      })
-    } else {this.setState({
-      temperature: '',
-      city: '',
-      country: '',
-      humidity: '',
-      description: '',
-      erorr: 'Please Enter Valid Data'
-    })}
+    axios.get(LINK).then(res => {
+      if (city && country) {
+        this.setState({
+          temperature: res.data.main.temp,
+          city: res.data.name,
+          country: res.data.sys.country,
+          humidity: res.data.main.humidity,
+          description: res.data.weather[0].description,
+          erorr: ''
+        })
+      } else {this.setState({
+        temperature: '',
+        city: '',
+        country: '',
+        humidity: '',
+        description: '',
+        erorr: 'Please Enter Valid Data'
+      })}
+    })
   }
 
   render() {
